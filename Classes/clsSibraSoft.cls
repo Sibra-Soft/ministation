@@ -149,8 +149,8 @@ End Function
 Public Sub TerminateProcessByPid(pid As Long)
 Shell "taskkill.exe /f /t /pid " & pid, vbHide
 End Sub
-Public Sub TerminateProcessByName(Name As String)
-Shell "taskkill.exe /f /t /im " & Name
+Public Sub TerminateProcessByName(name As String)
+Shell "taskkill.exe /f /t /im " & name
 End Sub
 Public Sub RegUnReg(ByVal inFileSpec As String, Optional inHandle As String = "")
     On Error Resume Next
@@ -243,7 +243,7 @@ FileExists = myFSO.FileExists(sFullPath)
 End Function
 Public Function CommondialogFilesToList(Files As String) As String
 Dim FileList
-Dim i As Integer
+Dim I As Integer
 Dim Output As String
 
 Debug.Print Files
@@ -252,9 +252,9 @@ FileList = Split(Files, Chr(0))
 If UBound(FileList) = 0 Then
     Output = Files
 Else
-    For i = 0 To UBound(FileList)
-        If Me.FileExists(FileList(0) & "\" & FileList(i)) Then
-            Output = Output & FileList(0) & "\" & FileList(i) & vbNewLine
+    For I = 0 To UBound(FileList)
+        If Me.FileExists(FileList(0) & "\" & FileList(I)) Then
+            Output = Output & FileList(0) & "\" & FileList(I) & vbNewLine
         End If
     Next
 End If
@@ -276,22 +276,22 @@ String2Pos = InStr(1, Mid(TargetString, String1Pos), SecondString) - 1
 
 StringBetween = Mid(TargetString, String1Pos, String2Pos)
 End Function
-Public Sub FilePutContents(file As String, Contents As String)
+Public Sub FilePutContents(File As String, Contents As String)
 Dim iFileNo As Integer
 
 iFileNo = FreeFile
 
-Open file For Output As #iFileNo
+Open File For Output As #iFileNo
     Print #iFileNo, Contents
 Close #iFileNo
 End Sub
-Public Function FileGetContents(file As String) As String
+Public Function FileGetContents(File As String) As String
 Dim intFile As Integer
 Dim strData As String
 
 intFile = FreeFile
 
-Open file For Input As #intFile
+Open File For Input As #intFile
     FileGetContents = Input(LOF(intFile), #intFile)
 Close #intFile
 End Function
@@ -309,13 +309,13 @@ EstimatedTimeRemaining = EstimatedTotalTime - Elapsedtime
 GetTimeRemaining = EstimatedTimeRemaining
 End Function
 Public Function GetFileNameFromFile(flname As String) As String
-Dim posn As Integer, i As Integer
+Dim posn As Integer, I As Integer
 Dim FName As String
 
 posn = 0
-For i = 1 To Len(flname)
-    If (Mid(flname, i, 1) = "\") Then posn = i
-Next i
+For I = 1 To Len(flname)
+    If (Mid(flname, I, 1) = "\") Then posn = I
+Next I
 FName = Right(flname, Len(flname) - posn)
 posn = InStr(FName, ".")
     If posn <> 0 Then
@@ -372,7 +372,7 @@ If lMinutes = 60 Then
     lHrs = lHrs + 1
 End If
 
-sAns = format(CStr(lMinutes), "00") & ":" & format(CStr(lSeconds), "00")
+sAns = Format(CStr(lMinutes), "00") & ":" & Format(CStr(lSeconds), "00")
 
 TimeString = sAns
 End Function
@@ -399,9 +399,9 @@ If lMinutes = 60 Then
 End If
 
 If ReturnType = LongTimeSerial Then
-    sAns = format(CStr(Abs(lHrs)), "#####0") & ":" & format(CStr(Abs(lMinutes)), "00") & ":" & format(CStr(Abs(lSeconds)), "00")
+    sAns = Format(CStr(Abs(lHrs)), "#####0") & ":" & Format(CStr(Abs(lMinutes)), "00") & ":" & Format(CStr(Abs(lSeconds)), "00")
 Else
-    sAns = format(CStr(Abs(lMinutes)), "00") & ":" & format(CStr(Abs(lSeconds)), "00")
+    sAns = Format(CStr(Abs(lMinutes)), "00") & ":" & Format(CStr(Abs(lSeconds)), "00")
 End If
 
 SecondsToTimeSerial = sAns
@@ -423,9 +423,9 @@ lngMinutesPart = lngMinSecRemainder \ 60000
 lngSecRemainder = lngMinSecRemainder Mod 60000
 lngSecondsPart = lngSecRemainder \ 1000
 
-sHoursPart = format(lngHoursPart, "00")
-sMinutesPart = format(lngMinutesPart, "00")
-sSecondsPart = format(lngSecondsPart, "00")
+sHoursPart = Format(lngHoursPart, "00")
+sMinutesPart = Format(lngMinutesPart, "00")
+sSecondsPart = Format(lngSecondsPart, "00")
 
 If ReturnType = LongTimeSerial Then
     sTimeRemaining = sHoursPart & ":" & sMinutesPart & ":" & sSecondsPart
@@ -443,13 +443,13 @@ Else
 End If
 End Function
 Public Function StringFormat(SourceString As String, ParamArray Values()) As String
-Dim i As Integer
+Dim I As Integer
 Dim ReturnValue As String
 
 ReturnValue = SourceString
 
-For i = 0 To UBound(Values)
-    ReturnValue = Replace(ReturnValue, "{" & i & "}", Values(i))
+For I = 0 To UBound(Values)
+    ReturnValue = Replace(ReturnValue, "{" & I & "}", Values(I))
 Next
 
 StringFormat = ReturnValue
@@ -461,22 +461,37 @@ SplitValue = Split(TargetString, Delimiter)
 
 Explode = SplitValue(Posistion)
 End Function
+Public Sub RemoveFile(File As String)
+If FileExists(File) Then Call Kill(File)
+End Sub
 Public Function StringToCollection(TargetString As String, Seperator As String) As Collection
-Dim i As Integer
+Dim I As Integer
 Dim SplitValue
+Dim TempCollection As New Collection
 
 SplitValue = Split(TargetString, Seperator)
 
-For i = 0 To UBound(SplitValue)
-    StringToCollection.Add SplitValue(i)
+For I = 0 To UBound(SplitValue)
+    If SplitValue(I) <> vbNullString Then TempCollection.Add SplitValue(I)
 Next
+
+Set StringToCollection = TempCollection
+End Function
+Public Function CollectionContains(TargetCollection As Collection, Value As String) As Boolean
+Dim I As Integer
+
+For I = 1 To TargetCollection.Count
+    If TargetCollection(I) = Value Then CollectionContains = True: Exit Function
+Next
+
+CollectionContains = False
 End Function
 Public Function CollectionToString(TargetCollection As Collection, Seperator As String) As String
-Dim i As Integer
+Dim I As Integer
 Dim ReturnValue As String
 
-For i = 1 To TargetCollection.count
-    ReturnValue = ReturnValue & TargetCollection(i) & Seperator
+For I = 1 To TargetCollection.Count
+    ReturnValue = ReturnValue & TargetCollection(I) & Seperator
 Next
 
 CollectionToString = ReturnValue
@@ -500,9 +515,9 @@ Public Function INIWrite(sSection As String, sKeyName As String, sNewString As S
 Dim r
 r = WritePrivateProfileString(sSection, sKeyName, sNewString, sFileName)
 End Function
-Public Function DownloadFile(Url As String, LocalFilename As String) As Boolean
+Public Function DownloadFile(url As String, LocalFilename As String) As Boolean
 Dim lngRetVal As Long
-lngRetVal = URLDownloadToFile(0, Url, LocalFilename, 0, 0)
+lngRetVal = URLDownloadToFile(0, url, LocalFilename, 0, 0)
 If lngRetVal = 0 Then DownloadFile = True
 End Function
 
@@ -687,13 +702,13 @@ Loop
 RmDir path
 End Function
 Public Function GetFileNameFromFilePath(FilePath As String, WithExtension As Boolean) As String
-Dim posn As Integer, i As Integer
+Dim posn As Integer, I As Integer
 Dim FName As String
     
 posn = 0
-For i = 1 To Len(FilePath)
-    If (Strings.Mid(FilePath, i, 1) = "\") Then posn = i
-Next i
+For I = 1 To Len(FilePath)
+    If (Strings.Mid(FilePath, I, 1) = "\") Then posn = I
+Next I
 
 FName = Strings.Right(FilePath, Len(FilePath) - posn)
 posn = InStr(FName, ".")

@@ -9,6 +9,7 @@ End Enum
 Public Enum enumPlayMode
     [NormalPlay]
     [RepeatTrack]
+    [Shuffle]
 End Enum
 
 Public Enum enumMediaMode

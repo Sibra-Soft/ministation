@@ -62,7 +62,7 @@ Public Sub NextTrack(Optional TrackNumber As Integer, Optional Force = False)
 Dim MediaFilename As String
 
 If Playlist.Count = 0 Then: Exit Sub
-If TrackNr = Playlist.Count Then: Exit Sub
+If TrackNr >= Playlist.Count - 1 And PlayMode = NormalPlay Then: Exit Sub
 
 If TrackNumber > 0 Then
     'Track number is set by parameter
@@ -71,7 +71,9 @@ Else
     Dim NextTrackNumber As Integer
     Randomize
     
+    If PlayMode = RepeatTrack Then NextTrackNumber = TrackNr: GoTo DoNext
     If Force Then NextTrackNumber = AudiostationMP3Player.TrackNr + 1: GoTo DoNext
+    
     NextTrackNumber = AudiostationMP3Player.TrackNr + 1
     
 DoNext:

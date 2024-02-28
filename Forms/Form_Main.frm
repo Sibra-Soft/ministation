@@ -12,12 +12,148 @@ Begin VB.Form Form_Main
    ClientLeft      =   150
    ClientTop       =   495
    ClientWidth     =   4665
+   BeginProperty Font 
+      Name            =   "Verdana"
+      Size            =   8.25
+      Charset         =   0
+      Weight          =   400
+      Underline       =   0   'False
+      Italic          =   0   'False
+      Strikethrough   =   0   'False
+   EndProperty
    Icon            =   "Form_Main.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    ScaleHeight     =   2040
    ScaleWidth      =   4665
    StartUpPosition =   2  'CenterScreen
+   Begin VB.PictureBox Picturebox_PanelBottom 
+      Align           =   2  'Align Bottom
+      BackColor       =   &H00C0C0C0&
+      BorderStyle     =   0  'None
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   300
+      Left            =   0
+      ScaleHeight     =   300
+      ScaleWidth      =   4665
+      TabIndex        =   2
+      Top             =   1740
+      Width           =   4665
+      Begin MBProgressBar.ProgressBar Progressbar_CurrentPos 
+         Height          =   180
+         Left            =   45
+         TabIndex        =   3
+         Top             =   75
+         Width           =   2775
+         _ExtentX        =   4895
+         _ExtentY        =   318
+         BorderStyle     =   2
+         CaptionType     =   0
+         Smooth          =   -1  'True
+         BackColor       =   12632256
+         BarStartColor   =   16711680
+         BarEndColor     =   16711680
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         BackPicture     =   "Form_Main.frx":030A
+         BarPicture      =   "Form_Main.frx":0326
+      End
+      Begin Graphical_Line.d3DLine d3DLine3 
+         Height          =   30
+         Left            =   0
+         TabIndex        =   4
+         Top             =   0
+         Width           =   5175
+         _ExtentX        =   9128
+         _ExtentY        =   53
+      End
+   End
+   Begin VB.PictureBox Picturebox_PanelPlaySettings 
+      BackColor       =   &H00C0C0C0&
+      BorderStyle     =   0  'None
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   1695
+      Left            =   0
+      ScaleHeight     =   1695
+      ScaleWidth      =   4695
+      TabIndex        =   16
+      Top             =   120
+      Visible         =   0   'False
+      Width           =   4695
+      Begin Ministation.ButtonBig Button_CancelSettings 
+         Height          =   390
+         Left            =   3720
+         TabIndex        =   20
+         Top             =   1150
+         Width           =   855
+         _ExtentX        =   1508
+         _ExtentY        =   688
+         Caption         =   "Cancel"
+         TextAlignment   =   0
+      End
+      Begin VB.OptionButton Option_Shuffle 
+         BackColor       =   &H00C0C0C0&
+         Caption         =   "Shuffle (only for playlists)"
+         Height          =   255
+         Left            =   120
+         TabIndex        =   19
+         Top             =   480
+         Width           =   2775
+      End
+      Begin VB.OptionButton Option_RepeatTrack 
+         BackColor       =   &H00C0C0C0&
+         Caption         =   "Reapeat Track"
+         Height          =   255
+         Left            =   120
+         TabIndex        =   18
+         Top             =   240
+         Width           =   1575
+      End
+      Begin VB.OptionButton Option_NormalPlay 
+         BackColor       =   &H00C0C0C0&
+         Caption         =   "Normal Play"
+         Height          =   255
+         Left            =   120
+         TabIndex        =   17
+         Top             =   0
+         Value           =   -1  'True
+         Width           =   1455
+      End
+      Begin Ministation.ButtonBig Button_SaveSettings 
+         Height          =   390
+         Left            =   2760
+         TabIndex        =   21
+         Top             =   1150
+         Width           =   855
+         _ExtentX        =   1508
+         _ExtentY        =   688
+         Caption         =   "Save"
+         TextAlignment   =   0
+      End
+   End
    Begin MSComctlLib.ImageList Imagelist_Digits 
       Left            =   4080
       Top             =   1080
@@ -31,43 +167,43 @@ Begin VB.Form Form_Main
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
          NumListImages   =   10
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "Form_Main.frx":0422
+            Picture         =   "Form_Main.frx":0342
             Key             =   ""
          EndProperty
          BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "Form_Main.frx":08F8
+            Picture         =   "Form_Main.frx":0818
             Key             =   ""
          EndProperty
          BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "Form_Main.frx":0DCE
+            Picture         =   "Form_Main.frx":0CEE
             Key             =   ""
          EndProperty
          BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "Form_Main.frx":12A4
+            Picture         =   "Form_Main.frx":11C4
             Key             =   ""
          EndProperty
          BeginProperty ListImage5 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "Form_Main.frx":177A
+            Picture         =   "Form_Main.frx":169A
             Key             =   ""
          EndProperty
          BeginProperty ListImage6 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "Form_Main.frx":1C50
+            Picture         =   "Form_Main.frx":1B70
             Key             =   ""
          EndProperty
          BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "Form_Main.frx":2126
+            Picture         =   "Form_Main.frx":2046
             Key             =   ""
          EndProperty
          BeginProperty ListImage8 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "Form_Main.frx":25FC
+            Picture         =   "Form_Main.frx":251C
             Key             =   ""
          EndProperty
          BeginProperty ListImage9 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "Form_Main.frx":2AD2
+            Picture         =   "Form_Main.frx":29F2
             Key             =   ""
          EndProperty
          BeginProperty ListImage10 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "Form_Main.frx":2FA8
+            Picture         =   "Form_Main.frx":2EC8
             Key             =   ""
          EndProperty
       EndProperty
@@ -86,10 +222,19 @@ Begin VB.Form Form_Main
    End
    Begin VB.CommandButton Button_MediaPlayer 
       BackColor       =   &H00C0C0C0&
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   375
       Index           =   3
       Left            =   1620
-      Picture         =   "Form_Main.frx":347E
+      Picture         =   "Form_Main.frx":339E
       Style           =   1  'Graphical
       TabIndex        =   6
       Top             =   1200
@@ -98,10 +243,19 @@ Begin VB.Form Form_Main
    Begin VB.CommandButton Button_MediaPlayer 
       Appearance      =   0  'Flat
       BackColor       =   &H00C0C0C0&
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   375
       Index           =   2
       Left            =   1140
-      Picture         =   "Form_Main.frx":3A08
+      Picture         =   "Form_Main.frx":3928
       Style           =   1  'Graphical
       TabIndex        =   7
       Top             =   1200
@@ -109,6 +263,15 @@ Begin VB.Form Form_Main
    End
    Begin VB.PictureBox Picturebox_Display 
       BackColor       =   &H00000000&
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   735
       Left            =   120
       ScaleHeight     =   675
@@ -120,6 +283,15 @@ Begin VB.Form Form_Main
          AutoRedraw      =   -1  'True
          BackColor       =   &H00000000&
          BorderStyle     =   0  'None
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
          Height          =   150
          Left            =   2520
          ScaleHeight     =   150
@@ -132,6 +304,15 @@ Begin VB.Form Form_Main
          AutoRedraw      =   -1  'True
          BackColor       =   &H00000000&
          BorderStyle     =   0  'None
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
          Height          =   150
          Left            =   2520
          ScaleHeight     =   150
@@ -239,21 +420,21 @@ Begin VB.Form Form_Main
       Begin VB.Image Image9 
          Height          =   240
          Left            =   3360
-         Picture         =   "Form_Main.frx":3F92
+         Picture         =   "Form_Main.frx":3EB2
          Top             =   200
          Width           =   450
       End
       Begin VB.Image Image_Pause 
          Height          =   255
          Left            =   2280
-         Picture         =   "Form_Main.frx":4594
+         Picture         =   "Form_Main.frx":44B4
          Top             =   120
          Width           =   195
       End
       Begin VB.Image Image_Play 
          Height          =   255
          Left            =   2250
-         Picture         =   "Form_Main.frx":487E
+         Picture         =   "Form_Main.frx":479E
          Top             =   120
          Visible         =   0   'False
          Width           =   195
@@ -261,66 +442,75 @@ Begin VB.Form Form_Main
       Begin VB.Image Image8 
          Height          =   150
          Left            =   2950
-         Picture         =   "Form_Main.frx":4B68
+         Picture         =   "Form_Main.frx":4A88
          Top             =   420
          Width           =   495
       End
       Begin VB.Image Image7 
          Height          =   165
          Left            =   2520
-         Picture         =   "Form_Main.frx":4F92
+         Picture         =   "Form_Main.frx":4EB2
          Top             =   10
          Width           =   390
       End
       Begin VB.Image Image6 
          Height          =   165
          Left            =   2950
-         Picture         =   "Form_Main.frx":5344
+         Picture         =   "Form_Main.frx":5264
          Top             =   240
          Width           =   330
       End
       Begin VB.Image Image5 
          Height          =   240
          Left            =   2280
-         Picture         =   "Form_Main.frx":5672
+         Picture         =   "Form_Main.frx":5592
          Top             =   120
          Width           =   150
       End
       Begin VB.Image Image4 
          Height          =   150
          Left            =   1850
-         Picture         =   "Form_Main.frx":58B4
+         Picture         =   "Form_Main.frx":57D4
          Top             =   10
          Width           =   315
       End
       Begin VB.Image Image3 
          Height          =   225
          Left            =   1440
-         Picture         =   "Form_Main.frx":5B76
+         Picture         =   "Form_Main.frx":5A96
          Top             =   240
          Width           =   120
       End
       Begin VB.Image Image2 
          Height          =   150
          Left            =   1120
-         Picture         =   "Form_Main.frx":5D20
+         Picture         =   "Form_Main.frx":5C40
          Top             =   15
          Width           =   300
       End
       Begin VB.Image Image1 
          Height          =   165
          Left            =   120
-         Picture         =   "Form_Main.frx":5FBA
+         Picture         =   "Form_Main.frx":5EDA
          Top             =   10
          Width           =   525
       End
    End
    Begin VB.CommandButton Button_MediaPlayer 
       BackColor       =   &H00C0C0C0&
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   375
       Index           =   0
       Left            =   120
-      Picture         =   "Form_Main.frx":64A0
+      Picture         =   "Form_Main.frx":63C0
       Style           =   1  'Graphical
       TabIndex        =   9
       Top             =   1200
@@ -328,10 +518,19 @@ Begin VB.Form Form_Main
    End
    Begin VB.CommandButton Button_MediaPlayer 
       BackColor       =   &H00C0C0C0&
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   375
       Index           =   1
       Left            =   660
-      Picture         =   "Form_Main.frx":6A6A
+      Picture         =   "Form_Main.frx":698A
       Style           =   1  'Graphical
       TabIndex        =   8
       Top             =   1200
@@ -339,61 +538,23 @@ Begin VB.Form Form_Main
    End
    Begin VB.CommandButton Button_MediaPlayer 
       BackColor       =   &H00C0C0C0&
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   375
       Index           =   4
       Left            =   2160
-      Picture         =   "Form_Main.frx":6FF4
+      Picture         =   "Form_Main.frx":6F14
       Style           =   1  'Graphical
       TabIndex        =   5
       Top             =   1200
       Width           =   495
-   End
-   Begin VB.PictureBox Picturebox_PanelBottom 
-      Align           =   2  'Align Bottom
-      BackColor       =   &H00C0C0C0&
-      BorderStyle     =   0  'None
-      Height          =   300
-      Left            =   0
-      ScaleHeight     =   300
-      ScaleWidth      =   4665
-      TabIndex        =   2
-      Top             =   1740
-      Width           =   4665
-      Begin MBProgressBar.ProgressBar Progressbar_CurrentPos 
-         Height          =   180
-         Left            =   45
-         TabIndex        =   3
-         Top             =   75
-         Width           =   2775
-         _ExtentX        =   4895
-         _ExtentY        =   318
-         BorderStyle     =   2
-         CaptionType     =   0
-         Smooth          =   -1  'True
-         BackColor       =   12632256
-         BarStartColor   =   16711680
-         BarEndColor     =   16711680
-         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         BackPicture     =   "Form_Main.frx":75BE
-         BarPicture      =   "Form_Main.frx":75DA
-      End
-      Begin Graphical_Line.d3DLine d3DLine3 
-         Height          =   30
-         Left            =   0
-         TabIndex        =   4
-         Top             =   0
-         Width           =   5175
-         _ExtentX        =   9128
-         _ExtentY        =   53
-      End
    End
    Begin Graphical_Line.d3DLine d3DLine2 
       Height          =   135
@@ -447,17 +608,20 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+Public SavedLocations As New Collection
 Public Sub AddToPlaylist(file As String)
 Dim MediaDuration As String
 Dim lstItem As ListItem
 Dim Files
 Dim FilesToAddCount As Integer
-Dim i As Integer
+Dim I As Integer
 Dim FirstIndex As Integer
 Dim AddingMoreThanOne As Boolean
 Dim FileNotFoundCount As Integer
 
 On Error GoTo ErrorHandler
+Screen.MousePointer = vbHourglass
+
 Files = Split(file, vbNewLine)
 FilesToAddCount = UBound(Files)
 
@@ -465,23 +629,33 @@ If FilesToAddCount > 0 Then: FirstIndex = 0
 If FilesToAddCount > 1 Then: AddingMoreThanOne = True
 
 'Add files to the playlist
-For i = FirstIndex To FilesToAddCount
-    'Get current file to process
-    file = Files(i)
-    
+Set Playlist = New Collection
+If AddingMoreThanOne Then
+    For I = FirstIndex To FilesToAddCount
+        file = Files(I)
+        
+        If Not file = vbNullString Then Playlist.Add file
+    Next
+Else
     Playlist.Add file
-Next
+End If
 
 'Restore default
 Screen.MousePointer = vbDefault
-
 Exit Sub
+
 ErrorHandler:
+Screen.MousePointer = vbDefault
+
 Select Case Err.Number
     Case 0
     Case 35602
     Case Else: Debug.Print Err.Number & " - " & Err.Description
 End Select
+End Sub
+
+Private Sub Button_CancelSettings_Click()
+Picturebox_PanelPlaySettings.Visible = False
 End Sub
 
 Private Sub Button_MediaPlayer_Click(index As Integer)
@@ -500,7 +674,25 @@ Select Case index
 End Select
 End Sub
 
+Private Sub Button_SaveSettings_Click()
+
+If Option_NormalPlay.value Then
+    PlayMode = NormalPlay
+ElseIf Option_RepeatTrack.value Then
+    PlayMode = RepeatTrack
+ElseIf Option_Shuffle.value Then
+    PlayMode = Shuffle
+End If
+
+Picturebox_PanelPlaySettings.Visible = False
+End Sub
+
 Private Sub Form_Load()
+Dim Locations As String
+
+Locations = Settings.ReadSetting("Sibra-Soft", "Ministation", "SavedLocations", "")
+Set SavedLocations = Extensions.StringToCollection(Locations, vbNewLine)
+
 ChDrive App.path
 ChDir App.path
 
@@ -519,11 +711,8 @@ End If
 Call BASS_SetConfig(BASS_CONFIG_NET_PLAYLIST, 1) ' enable playlist processing
 Call BASS_SetConfig(BASS_CONFIG_NET_PREBUF, 0) ' minimize automatic pre-buffering, so we can do it (and display it) instead
 
-Picturebox_Khz.PaintPicture Imagelist_Digits.ListImages(1).Picture, 0, 0
-Picturebox_Khz.PaintPicture Imagelist_Digits.ListImages(2).Picture, 120, 0
-Picturebox_Khz.PaintPicture Imagelist_Digits.ListImages(3).Picture, 240, 0
-
-Picturebox_KBit.PaintPicture Imagelist_Digits.ListImages(1).Picture, 0, 0
+Call GenerateSegmentDisplay(0, Picturebox_KBit, Imagelist_Digits)
+Call GenerateSegmentDisplay(0, Picturebox_Khz, Imagelist_Digits)
 
 AudiostationMP3Player.Init
 End Sub
@@ -545,12 +734,14 @@ With CommonDialog
     .CancelError = True
     .MaxFileSize = 9999
     .DialogTitle = "Play audio file(s)"
-    .Filter = ComboxboxToCommondialogFilter
+    .Filter = "MPEG-1 Layer 3 (*.mp3)|*.mp3|Microsoft WaveForm Audio (*.wav)|*.wav"
     .flags = cdlOFNAllowMultiselect Or cdlOFNExplorer Or cdlOFNHideReadOnly
     .ShowOpen
 
     If .filename <> vbNullString Then
         Files = Extensions.CommondialogFilesToList(.filename)
+        
+        AudiostationMP3Player.TrackNr = 1
         
         Call AddToPlaylist(Files)
         Call AudiostationMP3Player.StartPlay
@@ -564,8 +755,47 @@ Select Case Err.Number
 End Select
 End Sub
 
+Private Sub MenuItem_File_PlayLocation_Click()
+Dim LocalFile As String
+
+Form_OpenLocation.Show vbModal, Me
+
+If Form_OpenLocation.DialogResult = vbOK Then
+    If Not Extensions.CollectionContains(SavedLocations, Form_OpenLocation.Location) Then
+        SavedLocations.Add Form_OpenLocation.Location
+    End If
+    
+    LocalFile = App.path & "\temp.mp3"
+    
+    Call Extensions.RemoveFile(LocalFile)
+    Call Extensions.DownloadFile(Form_OpenLocation.Location, LocalFile)
+    
+    Call BASS_StreamFree(chan)
+    Call BASS_MusicFree(chan)
+    
+    chan = BASS_StreamCreateFile(BASSFALSE, StrPtr(LocalFile), 0, 0, BASS_STREAM_AUTOFREE)
+    If chan = 0 Then chan = BASS_MusicLoad(BASSFALSE, StrPtr(LocalFile), 0, 0, BASS_STREAM_AUTOFREE, 1)
+    
+    Call BASS_ChannelPlay(chan, True)
+    
+    If BASS_IsStarted Then
+        Call Settings.WriteSetting("Sibra-Soft", "Ministation", "SavedLocations", Extensions.CollectionToString(SavedLocations, vbNewLine))
+        
+        TrackNr = 1
+        PlayState = Playing
+    End If
+End If
+End Sub
+
 Private Sub MenuItem_Help_About_Click()
 Form_About.Show vbModal, Me
+End Sub
+
+Private Sub MenuItem_Options_Play_Click()
+Option_Shuffle.Enabled = True
+If AudiostationMP3Player.Playlist.Count <= 1 Then Option_Shuffle.Enabled = False
+
+Picturebox_PanelPlaySettings.Visible = True
 End Sub
 
 Private Sub Timer_Main_Timer()
@@ -590,6 +820,14 @@ If PlayState = Playing Then
     SegmentDisplay_Minutes.value = Extensions.Explode(TimeSerial, ":", 0)
     SegmentDisplay_Seconds.value = Extensions.Explode(TimeSerial, ":", 1)
     
+    Dim BassTime As New BaseTime
+    Dim Bitrate As Single
+    
+    Call BASS_ChannelGetAttribute(chan, BASS_ATTRIB_BITRATE, Bitrate)
+    
+    Call GenerateSegmentDisplay(CStr(CInt(BassTime.GetFrequency(chan) / 1000)), Picturebox_Khz, Imagelist_Digits)
+    Call GenerateSegmentDisplay(CStr(CInt(Bitrate)), Picturebox_KBit, Imagelist_Digits)
+    
     Image_Pause.Visible = False
     Image_Play.Visible = True
     
@@ -604,6 +842,9 @@ ElseIf PlayState = Paused Then
     Image_Pause.Visible = True
 
 End If
-           
+
+If AudiostationMP3Player.PlayState = Playing And Remainingtime = 0 Then AudiostationMP3Player.PlayState = MediaEnded
+If AudiostationMP3Player.PlayState = MediaEnded Then AudiostationMP3Player.NextTrack
+    
 SegmentDisplay_TrackCount.value = AudiostationMP3Player.TrackNr
 End Sub

@@ -128,7 +128,7 @@ Begin VB.Form Form_About
       End
       Begin VB.Label Label6 
          BackStyle       =   0  'Transparent
-         Caption         =   $"Form_About.frx":042E
+         Caption         =   $"Form_About.frx":0316
          Height          =   615
          Left            =   120
          TabIndex        =   13
@@ -303,7 +303,7 @@ Begin VB.Form Form_About
    End
    Begin VB.Label Label4 
       BackStyle       =   0  'Transparent
-      Caption         =   $"Form_About.frx":04BF
+      Caption         =   $"Form_About.frx":03A7
       Height          =   1095
       Left            =   120
       TabIndex        =   6
