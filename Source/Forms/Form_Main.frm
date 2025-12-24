@@ -2,13 +2,14 @@ VERSION 5.00
 Object = "{69DBEE3D-E09E-4122-9CAA-E6734195BEEC}#1.0#0"; "d3DLine.ocx"
 Object = "{0A362340-2E5E-11D3-85BF-00105AC8B715}#1.0#0"; "isDigitalLibrary.ocx"
 Object = "{BF3128D8-55B8-11D4-8ED4-00E07D815373}#1.0#0"; "MBPrgBar.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "mscomctl.ocx"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
+Object = "{40F6D89D-D6BF-4EAD-B885-E1869BDF4E31}#41.0#0"; "AdioLibrary.ocx"
 Begin VB.Form Form_Main 
    BackColor       =   &H00C0C0C0&
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Ministation"
-   ClientHeight    =   2040
+   ClientHeight    =   2070
    ClientLeft      =   150
    ClientTop       =   495
    ClientWidth     =   4665
@@ -24,9 +25,27 @@ Begin VB.Form Form_Main
    Icon            =   "Form_Main.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
-   ScaleHeight     =   2040
+   ScaleHeight     =   2070
    ScaleWidth      =   4665
    StartUpPosition =   2  'CenterScreen
+   Begin AdioLibrary.AdioCore AdioCore 
+      Left            =   120
+      Top             =   1080
+      _ExtentX        =   2778
+      _ExtentY        =   873
+      Begin AdioLibrary.AdioPlaylist AdioPlaylist 
+         Left            =   1080
+         Top             =   0
+         _ExtentX        =   847
+         _ExtentY        =   847
+      End
+      Begin AdioLibrary.AdioMediaPlayer AdioMediaPlayer 
+         Left            =   600
+         Top             =   0
+         _ExtentX        =   847
+         _ExtentY        =   847
+      End
+   End
    Begin VB.PictureBox Picturebox_PanelBottom 
       Align           =   2  'Align Bottom
       BackColor       =   &H00C0C0C0&
@@ -45,7 +64,7 @@ Begin VB.Form Form_Main
       ScaleHeight     =   300
       ScaleWidth      =   4665
       TabIndex        =   2
-      Top             =   1740
+      Top             =   1770
       Width           =   4665
       Begin MBProgressBar.ProgressBar Progressbar_CurrentPos 
          Height          =   180
@@ -609,36 +628,11 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Public SavedLocations As New Collection
-Public Sub AddToPlaylist(file As String)
-Dim MediaDuration As String
-Dim lstItem As ListItem
-Dim Files
-Dim FilesToAddCount As Integer
-Dim I As Integer
-Dim FirstIndex As Integer
-Dim AddingMoreThanOne As Boolean
-Dim FileNotFoundCount As Integer
-
+Public Sub AddToPlaylist(Files As String)
 On Error GoTo ErrorHandler
 Screen.MousePointer = vbHourglass
 
-Files = Split(file, vbNewLine)
-FilesToAddCount = UBound(Files)
-
-If FilesToAddCount > 0 Then: FirstIndex = 0
-If FilesToAddCount > 1 Then: AddingMoreThanOne = True
-
-'Add files to the playlist
-Set Playlist = New Collection
-If AddingMoreThanOne Then
-    For I = FirstIndex To FilesToAddCount
-        file = Files(I)
-        
-        If Not file = vbNullString Then Playlist.Add file
-    Next
-Else
-    Playlist.Add file
-End If
+AdioPlaylist.AddMultipleFiles Files
 
 'Restore default
 Screen.MousePointer = vbDefault
@@ -660,17 +654,17 @@ End Sub
 
 Private Sub Button_MediaPlayer_Click(index As Integer)
 Select Case index
-    Case 0: AudiostationMP3Player.PreviousTrack
-    Case 1: AudiostationMP3Player.StopPlay
+    Case 0: Call AdioMediaPlayer.LoadFile(AdioPlaylist.GetTrack(PLS_PREV))
+    Case 1: Call AdioMediaPlayer.StopPlay
     Case 2
-        If Playlist.Count = 0 Then
+        If AdioPlaylist.GetList.Count = 0 Then
             MenuItem_File_PlayFile_Click
         Else
             AudiostationMP3Player.StartPlay
         End If
 
-    Case 3: AudiostationMP3Player.Pause
-    Case 4: AudiostationMP3Player.NextTrack
+    Case 3: Call AdioMediaPlayer.PausePlay
+    Case 4: Call AdioMediaPlayer.LoadFile(AdioPlaylist.GetTrack(PLS_NEXT))
 End Select
 End Sub
 
@@ -695,31 +689,6 @@ Set SavedLocations = Extensions.StringToCollection(Locations, vbNewLine)
 
 ChDrive App.path
 ChDir App.path
-
-' Check the correct BASS was loaded
-If (HiWord(BASS_GetVersion) <> BASSVERSION) Then
-    MsgBox "An incorrect version of BASS.DLL was loaded", vbCritical
-    End
-End If
-
-' Initialize BASS
-If (BASS_Init(-1, 44100, 0, Me.hwnd, 0) = 0) Then
-    MsgBox es & vbCrLf & vbCrLf & "error code: " & BASS_ErrorGetCode, vbExclamation, "Error"
-    End
-End If
-
-Call BASS_SetConfig(BASS_CONFIG_NET_PLAYLIST, 1) ' enable playlist processing
-Call BASS_SetConfig(BASS_CONFIG_NET_PREBUF, 0) ' minimize automatic pre-buffering, so we can do it (and display it) instead
-
-Call GenerateSegmentDisplay(0, Picturebox_KBit, Imagelist_Digits)
-Call GenerateSegmentDisplay(0, Picturebox_Khz, Imagelist_Digits)
-
-AudiostationMP3Player.Init
-End Sub
-
-Private Sub Form_Unload(Cancel As Integer)
-Call BASS_ChannelFree(chan)
-Call BASS_Free
 End Sub
 
 Private Sub MenuItem_File_Exit_Click()
@@ -793,58 +762,8 @@ End Sub
 
 Private Sub MenuItem_Options_Play_Click()
 Option_Shuffle.Enabled = True
-If AudiostationMP3Player.Playlist.Count <= 1 Then Option_Shuffle.Enabled = False
+If AdioPlaylist.RepeatMode = PLS_SHUFFLE Then Option_Shuffle.Enabled = False
 
 Picturebox_PanelPlaySettings.Visible = True
 End Sub
 
-Private Sub Timer_Main_Timer()
-Dim length, Pos As Long
-Dim Totaltime, Elapsedtime, Remainingtime  As Double
-Dim TimeSerial As String
-
-If PlayState = Playing Then
-    length = BASS_ChannelGetLength(chan, BASS_POS_BYTE)
-    Pos = BASS_ChannelGetPosition(chan, BASS_POS_BYTE)
-    Totaltime = BASS_ChannelBytes2Seconds(chan, length)
-    Elapsedtime = BASS_ChannelBytes2Seconds(chan, Pos)
-    Remainingtime = Totaltime - Elapsedtime
-    
-    If Not Totaltime <= 0 Then
-        Progressbar_CurrentPos.max = Totaltime
-        Progressbar_CurrentPos.value = Elapsedtime
-    End If
-    
-    TimeSerial = Extensions.SecondsToTimeSerial(Elapsedtime, SmallTimeSerial)
-    
-    SegmentDisplay_Minutes.value = Extensions.Explode(TimeSerial, ":", 0)
-    SegmentDisplay_Seconds.value = Extensions.Explode(TimeSerial, ":", 1)
-    
-    Dim BassTime As New BaseTime
-    Dim Bitrate As Single
-    
-    Call BASS_ChannelGetAttribute(chan, BASS_ATTRIB_BITRATE, Bitrate)
-    
-    Call GenerateSegmentDisplay(CStr(CInt(BassTime.GetFrequency(chan) / 1000)), Picturebox_Khz, Imagelist_Digits)
-    Call GenerateSegmentDisplay(CStr(CInt(Bitrate)), Picturebox_KBit, Imagelist_Digits)
-    
-    Image_Pause.Visible = False
-    Image_Play.Visible = True
-    
-ElseIf PlayState = MediaEnded Or Stopped Then
-
-    Image_Pause.Visible = False
-    Image_Play.Visible = False
-    
-ElseIf PlayState = Paused Then
-    
-    Image_Play.Visible = False
-    Image_Pause.Visible = True
-
-End If
-
-If AudiostationMP3Player.PlayState = Playing And Remainingtime = 0 Then AudiostationMP3Player.PlayState = MediaEnded
-If AudiostationMP3Player.PlayState = MediaEnded Then AudiostationMP3Player.NextTrack
-    
-SegmentDisplay_TrackCount.value = AudiostationMP3Player.TrackNr
-End Sub

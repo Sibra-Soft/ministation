@@ -138,7 +138,7 @@ Begin VB.Form Form_About
       Begin VB.Label Label9 
          AutoSize        =   -1  'True
          BackStyle       =   0  'Transparent
-         Caption         =   "Copyright © Sibra-Soft 2009 - 2021"
+         Caption         =   "Copyright © Sibra-Soft 2009 - 2025"
          Height          =   195
          Left            =   120
          TabIndex        =   12
@@ -330,5 +330,5 @@ Unload Me
 End Sub
 
 Private Sub Form_Load()
-lbl_version.Caption = App.Major & "." & App.Minor & " Build: " & App.Revision
+lbl_version.Caption = App.Major & "." & App.Minor & "." & App.Revision
 End Sub
