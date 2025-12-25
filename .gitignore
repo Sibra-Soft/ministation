@@ -20,3 +20,4 @@ desktop.ini
 /docs/images/
 /backups/
 *.oca
+/source/*.dll
