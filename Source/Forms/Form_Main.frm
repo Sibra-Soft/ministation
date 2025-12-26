@@ -9,7 +9,7 @@ Begin VB.Form Form_Main
    BackColor       =   &H00C0C0C0&
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Ministation"
-   ClientHeight    =   2070
+   ClientHeight    =   2085
    ClientLeft      =   150
    ClientTop       =   495
    ClientWidth     =   4665
@@ -25,14 +25,20 @@ Begin VB.Form Form_Main
    Icon            =   "Form_Main.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
-   ScaleHeight     =   2070
+   ScaleHeight     =   2085
    ScaleWidth      =   4665
    StartUpPosition =   2  'CenterScreen
    Begin AdioLibrary.AdioCore AdioCore 
-      Left            =   120
-      Top             =   1080
-      _ExtentX        =   2778
+      Left            =   2340
+      Top             =   1200
+      _ExtentX        =   3625
       _ExtentY        =   873
+      Begin AdioLibrary.AdioTagging AdioTagging 
+         Left            =   1560
+         Top             =   0
+         _ExtentX        =   847
+         _ExtentY        =   847
+      End
       Begin AdioLibrary.AdioPlaylist AdioPlaylist 
          Left            =   1080
          Top             =   0
@@ -64,13 +70,13 @@ Begin VB.Form Form_Main
       ScaleHeight     =   300
       ScaleWidth      =   4665
       TabIndex        =   2
-      Top             =   1770
+      Top             =   1785
       Width           =   4665
       Begin MBProgressBar.ProgressBar Progressbar_CurrentPos 
          Height          =   180
          Left            =   45
          TabIndex        =   3
-         Top             =   75
+         Top             =   84
          Width           =   2775
          _ExtentX        =   4895
          _ExtentY        =   318
@@ -313,8 +319,9 @@ Begin VB.Form Form_Main
          EndProperty
          Height          =   150
          Left            =   2520
-         ScaleHeight     =   150
-         ScaleWidth      =   375
+         ScaleHeight     =   10
+         ScaleMode       =   3  'Pixel
+         ScaleWidth      =   25
          TabIndex        =   15
          Top             =   400
          Width           =   375
@@ -334,8 +341,9 @@ Begin VB.Form Form_Main
          EndProperty
          Height          =   150
          Left            =   2520
-         ScaleHeight     =   150
-         ScaleWidth      =   375
+         ScaleHeight     =   10
+         ScaleMode       =   3  'Pixel
+         ScaleWidth      =   25
          TabIndex        =   14
          Top             =   220
          Width           =   375
@@ -448,6 +456,7 @@ Begin VB.Form Form_Main
          Left            =   2280
          Picture         =   "Form_Main.frx":44B4
          Top             =   120
+         Visible         =   0   'False
          Width           =   195
       End
       Begin VB.Image Image_Play 
@@ -648,23 +657,68 @@ Select Case Err.Number
 End Select
 End Sub
 
+Private Sub AdioMediaPlayer_NewMediaFile(File As String)
+Dim I As Integer
+Dim Bitrate As Integer
+Dim Freq As Long
+Dim Nr As Integer
+Dim Pos As Integer
+
+Freq = AdioTagging.ReadProperty(File, pFrequency)
+Bitrate = AdioTagging.ReadProperty(File, pBitrate)
+
+I = 0
+Pos = 0
+Picturebox_KBit.Cls
+For I = 1 To Len(Bitrate) + 1
+    Nr = Mid(Bitrate, I, 1)
+    Picturebox_KBit.PaintPicture Imagelist_Digits.ListImages(Nr + 1).Picture, Pos, 0
+    Pos = Pos + 8
+Next
+
+I = 0
+Pos = 0
+Picturebox_Khz.Cls
+For I = 1 To Len(Freq) + 1
+    Nr = Mid(Freq, I, 1)
+    Picturebox_Khz.PaintPicture Imagelist_Digits.ListImages(Nr + 1).Picture, Pos, 0
+    Pos = Pos + 8
+Next
+End Sub
+
+Private Sub AdioMediaPlayer_Playing()
+Dim Elapsed, Total As Integer
+
+SegmentDisplay_Seconds.value = Extensions.Explode(AdioMediaPlayer.GetProperties.ElapsedString, ":", 1)
+SegmentDisplay_Minutes.value = Extensions.Explode(AdioMediaPlayer.GetProperties.ElapsedString, ":", 0)
+
+Elapsed = AdioMediaPlayer.GetProperties.ElapsedInSeconds
+Total = AdioMediaPlayer.GetProperties.DurationInSeconds
+
+Progressbar_CurrentPos.Max = Total
+Progressbar_CurrentPos.value = Elapsed
+End Sub
+
+Private Sub AdioPlaylist_ListChanged()
+SegmentDisplay_TrackCount.value = AdioPlaylist.ListCount
+End Sub
+
 Private Sub Button_CancelSettings_Click()
 Picturebox_PanelPlaySettings.Visible = False
 End Sub
 
 Private Sub Button_MediaPlayer_Click(index As Integer)
 Select Case index
-    Case 0: Call AdioMediaPlayer.LoadFile(AdioPlaylist.GetTrack(PLS_PREV))
+    Case 0: Call AdioMediaPlayer.LoadFile(AdioPlaylist.GetTrack(PLS_PREV).filename)
     Case 1: Call AdioMediaPlayer.StopPlay
     Case 2
         If AdioPlaylist.GetList.Count = 0 Then
             MenuItem_File_PlayFile_Click
         Else
-            AudiostationMP3Player.StartPlay
+            AdioMediaPlayer.StartPlay
         End If
-
     Case 3: Call AdioMediaPlayer.PausePlay
-    Case 4: Call AdioMediaPlayer.LoadFile(AdioPlaylist.GetTrack(PLS_NEXT))
+    Case 4: Call AdioMediaPlayer.LoadFile(AdioPlaylist.GetTrack(PLS_NEXT).filename)
 End Select
 End Sub
 
@@ -687,6 +741,9 @@ Dim Locations As String
 Locations = Settings.ReadSetting("Sibra-Soft", "Ministation", "SavedLocations", "")
 Set SavedLocations = Extensions.StringToCollection(Locations, vbNewLine)
 
+AdioCore.GetListOfDevices
+Call AdioCore.Initialize
+
 ChDrive App.path
 ChDir App.path
 End Sub
@@ -704,16 +761,16 @@ With CommonDialog
     .MaxFileSize = 9999
     .DialogTitle = "Play audio file(s)"
     .Filter = "MPEG-1 Layer 3 (*.mp3)|*.mp3|Microsoft WaveForm Audio (*.wav)|*.wav"
-    .flags = cdlOFNAllowMultiselect Or cdlOFNExplorer Or cdlOFNHideReadOnly
+    .Flags = cdlOFNAllowMultiselect Or cdlOFNExplorer Or cdlOFNHideReadOnly
     .ShowOpen
 
     If .filename <> vbNullString Then
         Files = Extensions.CommondialogFilesToList(.filename)
         
-        AudiostationMP3Player.TrackNr = 1
-        
         Call AddToPlaylist(Files)
-        Call AudiostationMP3Player.StartPlay
+        
+        AdioMediaPlayer.LoadFile AdioPlaylist.GetTrack(PLS_LAST).filename
+        AdioMediaPlayer.StartPlay
     End If
 End With
 
@@ -739,20 +796,7 @@ If Form_OpenLocation.DialogResult = vbOK Then
     Call Extensions.RemoveFile(LocalFile)
     Call Extensions.DownloadFile(Form_OpenLocation.Location, LocalFile)
     
-    Call BASS_StreamFree(chan)
-    Call BASS_MusicFree(chan)
-    
-    chan = BASS_StreamCreateFile(BASSFALSE, StrPtr(LocalFile), 0, 0, BASS_STREAM_AUTOFREE)
-    If chan = 0 Then chan = BASS_MusicLoad(BASSFALSE, StrPtr(LocalFile), 0, 0, BASS_STREAM_AUTOFREE, 1)
-    
-    Call BASS_ChannelPlay(chan, True)
-    
-    If BASS_IsStarted Then
-        Call Settings.WriteSetting("Sibra-Soft", "Ministation", "SavedLocations", Extensions.CollectionToString(SavedLocations, vbNewLine))
-        
-        TrackNr = 1
-        PlayState = Playing
-    End If
+    Call Settings.WriteSetting("Sibra-Soft", "Ministation", "SavedLocations", Extensions.CollectionToString(SavedLocations, vbNewLine))
 End If
 End Sub
 
@@ -767,3 +811,25 @@ If AdioPlaylist.RepeatMode = PLS_SHUFFLE Then Option_Shuffle.Enabled = False
 Picturebox_PanelPlaySettings.Visible = True
 End Sub
 
+Private Sub Timer_Main_Timer()
+If AdioMediaPlayer.State = AdioPlaying Then
+    If Image_Play.Visible = True Then
+        Image_Play.Visible = False
+    Else
+        Image_Play.Visible = True
+    End If
+End If
+
+If AdioMediaPlayer.State = AdioPaused Then
+    If Image_Pause.Visible = True Then
+        Image_Pause.Visible = False
+    Else
+        Image_Pause.Visible = True
+    End If
+End If
+
+If AdioMediaPlayer.State = AdioStopped Then
+    Image_Pause.Visible = False
+    Image_Play.Visible = False
+End If
+End Sub

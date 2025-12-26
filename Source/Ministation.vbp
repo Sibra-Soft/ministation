@@ -18,7 +18,6 @@ Module=ModDigitDisplay; Modules\modDigitDisplay.bas
 Form=Forms\Form_OpenLocation.frm
 Module=Settings; Modules\modSettings.bas
 Object={40F6D89D-D6BF-4EAD-B885-E1869BDF4E31}#41.0#0; AdioLibrary.ocx
-Module=ModBass; Modules\modBass.bas
 IconForm="Form_Main"
 Startup="Sub Main"
 HelpFile=""
