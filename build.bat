@@ -26,6 +26,7 @@ IF ERRORLEVEL 1 (
 	EXIT /B 1
 ) ELSE (
 	echo Build succeeded
+	EXIT /B 0
 )
 
 REM Helpers		  
