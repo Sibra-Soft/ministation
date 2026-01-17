@@ -65,6 +65,10 @@ jobs:
         run: |         
           CALL ./project/build.bat
           
+      - name: Zip Build
+        run: |
+          Compress-Archive -Path ./project/Build -DestinationPath compiled.zip
+          
       - name: Upload zip artifact
         uses: actions/upload-artifact@v4
         with:
