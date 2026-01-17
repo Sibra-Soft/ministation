@@ -738,7 +738,7 @@ End Sub
 Private Sub Form_Load()
 Dim Locations As String
 
-Locations = Settings.ReadSetting("Sibra-Soft", "Ministation", "SavedLocations", "")
+Locations = Extensions.INIRead("Sibra-Soft", "Ministation", "SavedLocations", "")
 Set SavedLocations = Extensions.StringToCollection(Locations, vbNewLine)
 
 AdioCore.GetListOfDevices

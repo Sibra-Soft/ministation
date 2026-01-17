@@ -218,11 +218,11 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Event Click() 'MappingInfo=UserControl,UserControl,-1,Click
 Attribute Click.VB_Description = "Occurs when the user presses and then releases a mouse button over an object."
-Event MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single) 'MappingInfo=UserControl,UserControl,-1,MouseDown
+Event MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single) 'MappingInfo=UserControl,UserControl,-1,MouseDown
 Attribute MouseDown.VB_Description = "Occurs when the user presses the mouse button while an object has the focus."
-Event MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single) 'MappingInfo=UserControl,UserControl,-1,MouseMove
+Event MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single) 'MappingInfo=UserControl,UserControl,-1,MouseMove
 Attribute MouseMove.VB_Description = "Occurs when the user moves the mouse."
-Event MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single) 'MappingInfo=UserControl,UserControl,-1,MouseUp
+Event MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single) 'MappingInfo=UserControl,UserControl,-1,MouseUp
 Attribute MouseUp.VB_Description = "Occurs when the user releases the mouse button while an object has the focus."
 
 Const m_def_ShowLed = False
@@ -240,12 +240,12 @@ If UserControl.Enabled = False Then
     iLabelX1.ShadowXOffset = 1
     iLabelX1.ShadowYOffset = 1
     iLabelX1.FontColor = &H808080
-    iLabelX1.top = 10
+    iLabelX1.Top = 10
 Else
     iLabelX1.ShadowXOffset = -1
     iLabelX1.ShadowYOffset = -1
     iLabelX1.FontColor = vbBlack
-    iLabelX1.top = 0
+    iLabelX1.Top = 0
 End If
 End Sub
 Private Sub CenterPixels_Click(index As Integer)
@@ -264,7 +264,7 @@ Private Sub Image5_Click()
 RaiseEvent Click
 End Sub
 
-Private Sub iLabelX1_OnMouseDown(ByVal Button As Integer, ByVal Shift As Integer, ByVal X As Long, ByVal Y As Long)
+Private Sub iLabelX1_OnMouseDown(ByVal Button As Integer, ByVal Shift As Integer, ByVal x As Long, ByVal y As Long)
 Dim J As Integer
 
 For J = 0 To CenterPixels.Count - 1
@@ -275,16 +275,16 @@ LastPixel.Picture = ImageList1.ListImages(5).Picture
 LeftPixels.Picture = ImageList1.ListImages(4).Picture
 RightPixels.Picture = ImageList1.ListImages(6).Picture
 
-ButtonContent.top = 7
+ButtonContent.Top = 7
 ButtonContent.Left = 6
 
-Image1.top = 140
+Image1.Top = 140
 Image1.Left = 75
-Image2.top = 140
+Image2.Top = 140
 Image2.Left = 75
 End Sub
 
-Private Sub iLabelX1_OnMouseUp(ByVal Button As Integer, ByVal Shift As Integer, ByVal X As Long, ByVal Y As Long)
+Private Sub iLabelX1_OnMouseUp(ByVal Button As Integer, ByVal Shift As Integer, ByVal x As Long, ByVal y As Long)
 Dim J As Integer
 
 For J = 0 To CenterPixels.Count - 1
@@ -295,12 +295,12 @@ LastPixel.Picture = ImageList1.ListImages(2).Picture
 LeftPixels.Picture = ImageList1.ListImages(1).Picture
 RightPixels.Picture = ImageList1.ListImages(3).Picture
 
-ButtonContent.top = 6
+ButtonContent.Top = 6
 ButtonContent.Left = 5
 
-Image1.top = 120
+Image1.Top = 120
 Image1.Left = 60
-Image2.top = 120
+Image2.Top = 120
 Image2.Left = 60
 End Sub
 Private Sub UserControl_Initialize()
@@ -310,7 +310,7 @@ For K = 1 To CenterPixels.Count - 1
     Unload CenterPixels(K)
 Next
 
-ButtonContent.top = 6
+ButtonContent.Top = 6
 ButtonContent.Left = 5
 End Sub
 
@@ -326,7 +326,7 @@ For J = 1 To Pixels
     Load CenterPixels(J)
     With CenterPixels(J)
         .Left = 8 * J
-        .top = 0
+        .Top = 0
         .Visible = True
     End With
 Next
@@ -362,16 +362,16 @@ Private Sub UserControl_Click()
     RaiseEvent Click
 End Sub
 
-Private Sub UserControl_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
-    RaiseEvent MouseDown(Button, Shift, X, Y)
+Private Sub UserControl_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+    RaiseEvent MouseDown(Button, Shift, x, y)
 End Sub
 
-Private Sub UserControl_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
-    RaiseEvent MouseMove(Button, Shift, X, Y)
+Private Sub UserControl_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
+    RaiseEvent MouseMove(Button, Shift, x, y)
 End Sub
 
-Private Sub UserControl_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
-    RaiseEvent MouseUp(Button, Shift, X, Y)
+Private Sub UserControl_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
+    RaiseEvent MouseUp(Button, Shift, x, y)
 End Sub
 Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
     UserControl.BackColor = PropBag.ReadProperty("BackColor", &HC0C0C0)
