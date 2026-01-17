@@ -5,7 +5,7 @@ setlocal EnableExtensions EnableDelayedExpansion
 REM Compiling
 echo === Compiling ===
 mkdir Build
-start /wait "" "C:\Program Files\Develop\Visual Basic 6\VB6.exe" /MAKE ".\source\ministation.vbp" /outdir "Build/" /out "build.log"
+start /wait "" "C:\Program Files\Develop\Visual Basic 6\VB6.exe" /MAKE ".\source\Ministation.vbp" /outdir "Build/" /out "build.log"
 echo === Compiling Completed ===
 
 CALL :sleep 5
