@@ -43,15 +43,12 @@ jobs:
               Write-Host "Non zero exit code returned by the installation process: $exitCode"
               exit $exitCode
           }
-
-      - name: Checkout Visual Basic Project
-        run: |
-          Invoke-WebRequest "https://www.audiostation.org/downloads/project.zip" -OutFile project.zip
           
-      - name: Unzip Project
-        run: |
-          Expand-Archive -Path "project.zip" -DestinationPath "./project/"
-               
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          path: './project'
+          
       - name: Register Project Dependencies
         shell: cmd
         run: | 
@@ -63,11 +60,6 @@ jobs:
         run: | 
           CALL ./project/prepare.bat
           
-      - name: Run VBUnit (Unit Testing Framework)
-        shell: cmd
-        run: |
-          exit 0
-          
       - name: Compile Visual Basic Project
         shell: cmd
         run: |         
@@ -77,4 +69,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: compiled-project
-          path: compile.zip
+          path: compiled.zip
