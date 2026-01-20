@@ -5,7 +5,7 @@ on:
     types: [published]
   
 jobs:
-  build:
+  compile:
     runs-on: windows-latest
     steps:
       - name: Download VB Compiler Image
@@ -65,12 +65,26 @@ jobs:
         run: |         
           CALL ./project/build.bat
           
-      - name: Zip Build
-        run: |
-          Compress-Archive -Path ./project/Build -DestinationPath compiled.zip
-          
       - name: Upload zip artifact
         uses: actions/upload-artifact@v4
         with:
-          name: compiled-project
-          path: compiled.zip
+          name: compiled-exe
+          path: ./project/Build
+          
+      - name: Install NSIS
+        uses: negrutiu/nsis-install@v2
+        
+      - name: Build installer
+        run: makensis ./project/setup/setup.nsi
+          
+      - name: Upload file to GitHub Release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./project/setup/Ministation_windows_setup.exe
+          asset_name: Ministation_windows_setup.exe
+          asset_content_type: application/exe
+      
+
