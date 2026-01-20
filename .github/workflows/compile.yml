@@ -55,7 +55,7 @@ jobs:
           cd ./project/deps
           CALL reg_deps.bat ../source/ministation.vbp
           
-      - name: Prepare
+      - name: Prepare Compile
         shell: cmd
         run: | 
           CALL ./project/prepare.bat
@@ -70,10 +70,15 @@ jobs:
         with:
           name: compiled-exe
           path: ./project/Build
-          
+                   
       - name: Install NSIS
         uses: negrutiu/nsis-install@v2
         
+      - name: Prepare Setup
+        shell: cmd
+        run: | 
+          CALL ./project/prepare_setup.bat
+          
       - name: Build installer
         run: makensis ./project/setup/setup.nsi
           
